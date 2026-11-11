@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Ticket Booking System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #166534;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #15803d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #166534;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 12px;
+            background: #f0fdf4;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Bus Ticket Booking</h1>
+    <p>Enter your booking details below.</p>
+
+    <form id="bookingForm">
+
+        <label>Ticket Fare (₱)</label>
+        <input type="number" id="fare" min="1" required>
+
+        <label>Number of Seats</label>
+        <input type="number" id="seats" min="1" required>
+
+        <label>Available Seats</label>
+        <input type="number" id="availableSeats" min="0" required>
+
+        <button type="submit">Calculate Fare</button>
+
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    document.getElementById('bookingForm')
+        .addEventListener('submit', async function(event) {
+
+        event.preventDefault();
+
+        const fare = Number(document.getElementById('fare').value);
+        const seats = Number(document.getElementById('seats').value);
+        const availableSeats = Number(
+            document.getElementById('availableSeats').value
+        );
+
+        try {
+            const response = await fetch('/api/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fare,
+                    seats,
+                    availableSeats
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error);
+            }
+
+            document.getElementById('result').innerHTML = `
+                <h3>Booking Result</h3>
+                <p>Total Fare: ₱${data.totalFare}</p>
+                <p>Seats: ${data.seats}</p>
+                <p>${data.message}</p>
+            `;
+
+        } catch (error) {
+            document.getElementById('result').textContent = error.message;
+        }
+    });
+</script>
+
+</body>
+</html>
