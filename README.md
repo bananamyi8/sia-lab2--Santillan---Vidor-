@@ -9,4 +9,4 @@ Member 2 (Ops): Ronelyn Santillan
 
 What the app does: This web application calculates the total bus ticket fare and checks seat availability based on the user's input.
 
-Live site: To be added by Member 2 in Part F.
+Live site: https://sia-lab2-santillan-vidor.onrender.com
