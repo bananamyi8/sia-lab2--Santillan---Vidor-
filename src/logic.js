@@ -11,7 +11,7 @@ function calculateTotalFare(fare, seats) {
     throw new Error('Seats must be 1 or more');
   }
 
-  return fare * seats;
+  return fare * seats / 10;
 }
 
 // Checks if the selected seats are available.
